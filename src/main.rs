@@ -31,7 +31,6 @@ impl EventHandler for Handler {
             false => {}
         }
 
-
     }
 }
 
@@ -42,8 +41,11 @@ async fn main() {
     if args.len() < 2 {
         panic!("Need to pass a discord token");
     }
-    let token = &args[1];
+    if !handlers::setup_env() {
+        panic!("Failed to setup file system");
+    }
 
+    let token = &args[1];
     let mut client = Client::builder(&token)
         .event_handler(Handler)
         .await
