@@ -1,0 +1,1 @@
+pub const GUILDS_PATH: &str = "guilds";
