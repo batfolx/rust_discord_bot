@@ -2,7 +2,6 @@ mod constants;
 mod handlers;
 use std::collections::HashMap;
 use std::env;
-use lazy_static::lazy_static;
 
 use serenity::{
     async_trait,
@@ -17,11 +16,18 @@ impl EventHandler for Handler {
 
 
     async fn message(&self, ctx: Context, msg: Message) {
-        if msg.content == "!ping" {
-            if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
-                println!("Error sending message: {:?}", why);
-            }
-        }
+        println!("Oi got a message");
+        //if msg.content == "!ping" {
+            //if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
+            //    println!("Error sending message: {:?}", why);
+            //}
+        //}
+        let (guild_key, member_key) = match handlers::get_guild_member_key(&msg) {
+            None => {return}
+            Some((gkey, mkey)) => (gkey, mkey)
+        };
+
+        println!("This is member key {} and this is guild key {}", &member_key, &guild_key);
     }
 
     async fn ready(&self, _: Context, ready: Ready) {
@@ -30,7 +36,6 @@ impl EventHandler for Handler {
             true => {}
             false => {}
         }
-
     }
 }
 
