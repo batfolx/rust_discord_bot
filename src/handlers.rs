@@ -2,11 +2,10 @@ use crate::constants;
 use std::path::Path;
 use std::fs::File;
 use std::fs;
-use serenity::{model::{channel::Message, gateway::Ready}, prelude::*, Error};
-use serenity::model::id::{GuildId};
+use serenity::{model::{channel::Message, gateway::Ready}, prelude::*};
+use serenity::model::id::{GuildId, ChannelId};
 use std::collections::HashSet;
 use serenity::model::channel::{ChannelType, GuildChannel};
-use std::future::Future;
 
 
 /// Sets up the file system environment
@@ -34,12 +33,19 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
         if !path.exists() {
             match File::create(&path) {
                 Ok(_) => {
-                    println!("Successfully created file ")
+                    println!("Successfully created file {}", &pathname)
                 },
                 Err(_) => return false
             };
         }
-        setup_channels(&ctx, &guild_id);
+        match setup_channels(&ctx, &guild_id).await {
+          true => {
+              println!("Successfully setup channels")
+          },
+          false => {
+              println!("Failed to setup channels")
+          }
+        };
 
     }
 
@@ -90,16 +96,23 @@ pub async fn setup_channels(ctx: &Context, guild_id: &GuildId) -> bool {
         }
     };
 
+
     let mut channel_set = HashSet::new();
+    let mut _channel_created = false;
+    let mut _category_created = false;
+
+
     for (_, guild_channel) in channels.iter() {
-        channel_set.insert(guild_channel.name.to_owned());
+        channel_set.insert(guild_channel.name.to_lowercase());
     }
 
+
+
     // create voice-only channel if it does not exist
-    if !channel_set.contains(constants::VOICE_ONLY_CHANNEL) {
+    if !&channel_set.contains(constants::VOICE_ONLY_CHANNEL) {
         match guild_id.create_channel(&ctx.http, |c|
             c.name(constants::VOICE_ONLY_CHANNEL).kind(ChannelType::Private)).await {
-            Ok(ok) => {
+            Ok(_ok) => {
                 println!("Successfully created voice-only channel")
             }
             Err(error) => {
@@ -108,8 +121,6 @@ pub async fn setup_channels(ctx: &Context, guild_id: &GuildId) -> bool {
             }
         };
     }
-
-
 
     return true;
 }

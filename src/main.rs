@@ -14,13 +14,8 @@ struct Handler;
 impl EventHandler for Handler {
 
 
-    async fn message(&self, ctx: Context, msg: Message) {
+    async fn message(&self, _ctx: Context, msg: Message) {
         println!("Oi got a message");
-        //if msg.content == "!ping" {
-            //if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
-            //    println!("Error sending message: {:?}", why);
-            //}
-        //}
         let (guild_key, member_key) = match handlers::get_guild_member_key(&msg) {
             None => {return}
             Some((gkey, mkey)) => (gkey, mkey)
