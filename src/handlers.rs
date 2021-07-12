@@ -9,6 +9,9 @@ use serenity::{
     prelude::*,
 };
 use std::io::Error;
+use serenity::model::id::GuildId;
+use serenity::model::guild::PartialMember;
+use serenity::model::prelude::User;
 
 
 /// Sets up the file system environment
@@ -41,4 +44,28 @@ pub async fn on_bot_ready(ready: &Ready) -> bool {
         }
     }
     return true;
+}
+
+//! Gets a guild key and the member key associated with the given member
+pub async fn get_guild_member_key(msg: Message) -> Option<(String, String)> {
+
+    let guild_id = match msg.guild_id {
+        None => return None,
+        Some(id) => id
+    };
+
+    let guild_key = guild_id.to_string().to_owned();
+    let member = match msg.member {
+        None => return None,
+        Some(member) => member,
+    };
+
+    let user = match member.user {
+        None => return None,
+        Some(user) => user
+    };
+
+    let member_key = format!("{}-{}-{}", user.name, user.discriminator, user.id.to_string());
+
+    return Some((guild_key, member_key));
 }

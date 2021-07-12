@@ -1,20 +1,20 @@
 mod constants;
 mod handlers;
-
+use std::collections::HashMap;
 use std::env;
-
+use lazy_static::lazy_static;
 
 use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
-use std::future::Future;
 
 struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
+
 
     async fn message(&self, ctx: Context, msg: Message) {
         if msg.content == "!ping" {
