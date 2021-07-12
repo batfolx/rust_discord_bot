@@ -1,6 +1,5 @@
 mod constants;
 mod handlers;
-use std::collections::HashMap;
 use std::env;
 
 use serenity::{
@@ -30,9 +29,9 @@ impl EventHandler for Handler {
         println!("This is member key {} and this is guild key {}", &member_key, &guild_key);
     }
 
-    async fn ready(&self, _: Context, ready: Ready) {
+    async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
-        match handlers::on_bot_ready(&ready).await {
+        match handlers::on_bot_ready(&ctx, &ready).await {
             true => {}
             false => {}
         }
