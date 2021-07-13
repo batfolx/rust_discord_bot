@@ -120,8 +120,10 @@ pub async fn setup_channels(ctx: &Context, guild_id: &GuildId) -> bool {
         };
     }
 
-
-
-
     return true;
+}
+
+/// Gets the guild pathname
+pub fn get_guild_pathname(guild_key: &String) -> String {
+    return format!("{}/{}.json", constants::GUILDS_PATH, &guild_key);
 }

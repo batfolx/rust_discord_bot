@@ -1,12 +1,14 @@
 mod constants;
 mod handlers;
 use std::env;
-
+use std::path::Path;
+use std::fs::{File, Metadata};
 use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
+use std::io::{Error, Read};
 
 struct Handler;
 
@@ -21,7 +23,41 @@ impl EventHandler for Handler {
             Some((gkey, mkey)) => (gkey, mkey)
         };
 
+
         println!("This is member key {} and this is guild key {}", &member_key, &guild_key);
+        let pathname = handlers::get_guild_pathname(&guild_key);
+        let path = Path::new(&pathname);
+        if !path.exists() {
+            match File::create(&path) {
+                Ok(_) => println!("Successfully created {}", &pathname),
+                Err(error) =>  {
+                    println!("Failed to create path {}", &pathname);
+                    return;
+                }
+            }
+        }
+
+
+        let mut file = match File::open(&path) {
+            Ok(file) => file,
+            Err(error) => {
+                println!("Failed to open path {} with error {}", &pathname, error);
+                return;
+            }
+        };
+
+
+        let mut file_string = String::new();
+        let size = match file.read_to_string(&mut file_string) {
+            Ok(size) => size,
+            Err(error) => {
+                println!("Error in reading file contents to string {}", error);
+                return;
+            }
+        };
+
+
+
     }
 
     async fn ready(&self, ctx: Context, ready: Ready) {
