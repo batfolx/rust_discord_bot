@@ -3,9 +3,9 @@ use std::path::Path;
 use std::fs::File;
 use std::fs;
 use serenity::{model::{channel::Message, gateway::Ready}, prelude::*};
-use serenity::model::id::{GuildId, ChannelId};
+use serenity::model::id::{GuildId};
 use std::collections::HashSet;
-use serenity::model::channel::{ChannelType, GuildChannel};
+use serenity::model::channel::{ChannelType};
 
 
 /// Sets up the file system environment
@@ -38,6 +38,7 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
                 Err(_) => return false
             };
         }
+
         match setup_channels(&ctx, &guild_id).await {
           true => {
               println!("Successfully setup channels")
@@ -98,8 +99,6 @@ pub async fn setup_channels(ctx: &Context, guild_id: &GuildId) -> bool {
 
 
     let mut channel_set = HashSet::new();
-    let mut _channel_created = false;
-    let mut _category_created = false;
 
 
     for (_, guild_channel) in channels.iter() {
@@ -107,11 +106,10 @@ pub async fn setup_channels(ctx: &Context, guild_id: &GuildId) -> bool {
     }
 
 
-
     // create voice-only channel if it does not exist
-    if !&channel_set.contains(constants::VOICE_ONLY_CHANNEL) {
+    if !channel_set.contains(constants::VOICE_ONLY_CHANNEL) {
         match guild_id.create_channel(&ctx.http, |c|
-            c.name(constants::VOICE_ONLY_CHANNEL).kind(ChannelType::Private)).await {
+            c.name(constants::VOICE_ONLY_CHANNEL).kind(ChannelType::Text)).await {
             Ok(_ok) => {
                 println!("Successfully created voice-only channel")
             }
@@ -121,6 +119,9 @@ pub async fn setup_channels(ctx: &Context, guild_id: &GuildId) -> bool {
             }
         };
     }
+
+
+
 
     return true;
 }
