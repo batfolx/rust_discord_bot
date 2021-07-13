@@ -2,13 +2,13 @@ mod constants;
 mod handlers;
 use std::env;
 use std::path::Path;
-use std::fs::{File, Metadata};
+use std::fs::{File};
 use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
-use std::io::{Error, Read};
+use std::io::{Read};
 
 struct Handler;
 
@@ -31,7 +31,7 @@ impl EventHandler for Handler {
             match File::create(&path) {
                 Ok(_) => println!("Successfully created {}", &pathname),
                 Err(error) =>  {
-                    println!("Failed to create path {}", &pathname);
+                    println!("Failed to create path {} with error {}", &pathname, error);
                     return;
                 }
             }
@@ -48,7 +48,7 @@ impl EventHandler for Handler {
 
 
         let mut file_string = String::new();
-        let size = match file.read_to_string(&mut file_string) {
+        let _size = match file.read_to_string(&mut file_string) {
             Ok(size) => size,
             Err(error) => {
                 println!("Error in reading file contents to string {}", error);
