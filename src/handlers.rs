@@ -48,6 +48,12 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
           }
         };
 
+        //for member in guild_id.members(&ctx.http).await.iter() {
+
+
+        //}
+
+
     }
 
 

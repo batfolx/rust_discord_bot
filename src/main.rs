@@ -23,11 +23,7 @@ impl EventHandler for Handler {
             Some((gkey, mkey)) => (gkey, mkey)
         };
 
-
         println!("This is member key {} and this is guild key {}", &member_key, &guild_key);
-
-
-
 
     }
 

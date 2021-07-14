@@ -20,7 +20,6 @@ pub fn get_guild_file_contents(guild_key: &String) -> std::io::Result<String> {
         }
     }
 
-
     let mut file = match File::open(&path) {
         Ok(file) => file,
         Err(error) => {
