@@ -2,10 +2,11 @@ use crate::constants;
 use std::path::Path;
 use std::fs::File;
 use std::fs;
-use serenity::{model::{channel::Message, gateway::Ready}, prelude::*};
+use serenity::{model::{channel::Message, gateway::Ready}, prelude::*, Error};
 use serenity::model::id::{GuildId};
 use std::collections::HashSet;
 use serenity::model::channel::{ChannelType};
+use serenity::model::guild::Member;
 
 
 /// Sets up the file system environment
@@ -48,11 +49,13 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
           }
         };
 
-        //for member in guild_id.members(&ctx.http).await.iter() {
-
-
-        //}
-
+        let members = match guild_id.members(&ctx.http, Some(1000 as u64), None).await {
+            Ok(members) => members,
+            Err(error) => {
+                println!("Failed to get members with error {}", error);
+                return false;
+            }
+        };
 
     }
 
