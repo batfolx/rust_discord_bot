@@ -1,6 +1,8 @@
-## rust_discord_bot
-
-A small discord bot written in Rust using the Serenity library
+## Discord Rust Bot
+A small discord bot written in Rust using the Serenity library. It will keep track of all of the
+messages sent and add XP for each member for each guild. It will also create a private `voice-only` channel
+that the bot will automatically place you in when you join a voice channel, as to keep any conversation-related message
+confined to the `voice-only` channel.
 
 ### How to run compile & run
 
