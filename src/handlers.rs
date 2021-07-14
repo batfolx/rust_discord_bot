@@ -4,7 +4,7 @@ use std::fs::File;
 use std::fs;
 use serenity::{model::{channel::Message, gateway::Ready}, prelude::*, Error};
 use serenity::model::id::{GuildId};
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 use serenity::model::channel::{ChannelType};
 use serenity::model::guild::Member;
 
@@ -56,6 +56,16 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
                 return false;
             }
         };
+
+        let member_hashmap: HashMap<String, HashMap<String, String>> = HashMap::new();
+        for member in members.iter() {
+            let member_key = format!("{}-{}-{}", member.user.name,
+                                     member.user.discriminator, member.user.id);
+
+
+
+
+        }
 
     }
 
