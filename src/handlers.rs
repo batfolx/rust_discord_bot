@@ -2,11 +2,10 @@ use crate::constants;
 use std::path::Path;
 use std::fs::File;
 use std::fs;
-use serenity::{model::{channel::Message, gateway::Ready}, prelude::*, Error};
+use serenity::{model::{channel::Message, gateway::Ready}, prelude::*};
 use serenity::model::id::{GuildId};
 use std::collections::{HashSet, HashMap};
 use serenity::model::channel::{ChannelType};
-use serenity::model::guild::Member;
 
 
 /// Sets up the file system environment

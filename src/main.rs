@@ -3,8 +3,6 @@ mod handlers;
 mod utils;
 
 use std::env;
-use std::path::Path;
-use std::fs::{File};
 use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},

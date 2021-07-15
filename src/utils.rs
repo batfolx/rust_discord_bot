@@ -1,10 +1,8 @@
 use crate::handlers;
 
-use std::env;
 use std::path::Path;
 use std::fs::{File};
 use std::io::{Read};
-use std::io::Result;
 
 /// Gets the guild file contents, creating it if it does not exist
 pub fn get_guild_file_contents(guild_key: &String) -> std::io::Result<String> {
