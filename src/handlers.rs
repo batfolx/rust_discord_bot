@@ -49,21 +49,36 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
           }
         };
 
-        let members = match guild_id.members(&ctx.http, Some(1000 as u64), None).await {
-            Ok(members) => members,
+        let file_contents = match fs::read_to_string(&path) {
+            Ok(file_contents) => {file_contents}
             Err(error) => {
-                println!("Failed to get members with error {}", error);
+                println!("Failed to read from {}, error {}", &pathname, error);
                 return false;
             }
         };
 
-        let member_hashmap: HashMap<String, HashMap<String, String>> = HashMap::new();
-        for member in members.iter() {
-            let member_key = format!("{}-{}-{}", member.user.name,
-                                     member.user.discriminator, member.user.id);
+        if file_contents.is_empty() {
+            let members = match guild_id.members(&ctx.http, Some(1000 as u64), None).await {
+                Ok(members) => members,
+                Err(error) => {
+                    println!("Failed to get members with error {}", error);
+                    return false;
+                }
+            };
 
+            let mut member_hashmap: HashMap<String, HashMap<&str, String>> = HashMap::new();
+            for member in members.iter() {
+                let user = &member.user;
+                let member_key = format!("{}-{}-{}", user.name,
+                                         user.discriminator, user.id);
 
+                let mut member_data: HashMap<&str, String> = HashMap::new();
+                member_data.insert( "id", user.id.to_string());
+                member_data.insert("current_xp", String::from("0"));
+                member_hashmap.insert(member_key, member_data);
 
+            }
+        } else {
 
         }
 
