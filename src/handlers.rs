@@ -66,15 +66,17 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
                 }
             };
 
-            let mut member_hashmap: HashMap<String, HashMap<&str, String>> = HashMap::new();
+            let mut member_hashmap: HashMap<String, HashMap<constants::MemberKeys, String>> = HashMap::new();
             for member in members.iter() {
                 let user = &member.user;
                 let member_key = format!("{}-{}-{}", user.name,
                                          user.discriminator, user.id);
 
-                let mut member_data: HashMap<&str, String> = HashMap::new();
-                member_data.insert( "id", user.id.to_string());
-                member_data.insert("current_xp", String::from("0"));
+                let mut member_data: HashMap<constants::MemberKeys, String> = HashMap::new();
+                member_data.insert( constants::MemberKeys::Id, user.id.to_string());
+                member_data.insert(constants::MemberKeys::CurrXp, String::from("0"));
+                member_data.insert(constants::MemberKeys::Name, user.name.to_owned());
+                member_data.insert(constants::MemberKeys::TotalXp, String::from("0"));
                 member_hashmap.insert(member_key, member_data);
 
             }
