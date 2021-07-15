@@ -57,6 +57,7 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
             }
         };
 
+        // if file content is empty we need to populate it
         if file_contents.is_empty() {
             let members = match guild_id.members(&ctx.http, Some(1000 as u64), None).await {
                 Ok(members) => members,
@@ -71,17 +72,24 @@ pub async fn on_bot_ready(ctx: &Context, ready: &Ready) -> bool {
                 let user = &member.user;
                 let member_key = format!("{}-{}-{}", user.name,
                                          user.discriminator, user.id);
+                println!("Member key {}", member_key);
 
                 let mut member_data: HashMap<constants::MemberKeys, String> = HashMap::new();
                 member_data.insert( constants::MemberKeys::Id, user.id.to_string());
-                member_data.insert(constants::MemberKeys::CurrXp, String::from("0"));
                 member_data.insert(constants::MemberKeys::Name, user.name.to_owned());
+                member_data.insert(constants::MemberKeys::Discriminator,
+                                   user.discriminator.to_string());
+                member_data.insert(constants::MemberKeys::CurrXp, String::from("0"));
                 member_data.insert(constants::MemberKeys::TotalXp, String::from("0"));
-                member_hashmap.insert(member_key, member_data);
+                member_data.insert(constants::MemberKeys::Level, String::from("1"));
+                member_data.insert(constants::MemberKeys::RoleName, String::from("Novice"));
+                member_data.insert(constants::MemberKeys::MemesSent, String::from("0"));
+                member_data.insert(constants::MemberKeys::MessagesSent, String::from("0"));
 
+                member_hashmap.insert(member_key, member_data);
             }
         } else {
-
+            println!("Members file is not empty! {}", &file_contents);
         }
 
     }
